@@ -30,6 +30,8 @@ class Modal extends Component {
   };
 
   render() {
+    const { link, desc } = this.props;
+
     return createPortal(
       <Overlay
         onClick={(e) => {
@@ -37,7 +39,7 @@ class Modal extends Component {
         }}
       >
         <ModalWin>
-          <Image src={this.props.link} alt={this.props.desc} />
+          <Image src={link} alt={desc} />
         </ModalWin>
       </Overlay>,
       modalRoot

@@ -13,26 +13,26 @@ const imagesApiService = new ImagesApiService();
 class App extends Component {
   state = {
     images: [],
-    totalHits: null,
+    totalImages: null,
     status: 'idle',
     error: null,
   };
 
   onSubmit = async (value) => {
     try {
-      this.setState({ status: 'pending' });
+      this.setState({ status: 'pending', images: [] });
       const searchQuery = value.trim();
       imagesApiService.searchQuery = searchQuery;
       imagesApiService.resetPage();
       const response = await imagesApiService.fetchImages();
-      const images = response.hits;
-      if (!images.length) {
+      const newImages = response.hits;
+      if (!newImages.length) {
         throw new Error(`${imagesApiService.searchQuery} not found`);
       }
-      const totalImages = response.totalHits;
+      const totalImages = response.totalImages;
       this.setState({
-        images: [...images],
-        totalHits: totalImages,
+        images: [...newImages],
+        totalImages,
         status: 'resolved',
       });
     } catch (error) {
@@ -51,51 +51,45 @@ class App extends Component {
   };
 
   render() {
-    if (this.state.status === 'idle') {
+    const { status, images, totalImages, error } = this.state;
+
+    if (status === 'idle') {
       return (
         <Container>
           <Searchbar onSubmit={this.onSubmit} />
-          {!!this.state.images.length && (
-            <ImageGallery items={this.state.images} />
-          )}
+          {!!images.length && <ImageGallery items={images} />}
         </Container>
       );
     }
 
-    if (this.state.status === 'pending') {
+    if (status === 'pending') {
       return (
         <Container>
           <Searchbar onSubmit={this.onSubmit} />
-          {!!this.state.images.length && (
-            <ImageGallery items={this.state.images} />
-          )}
+          {!!images.length && <ImageGallery items={images} />}
           <Loader />
         </Container>
       );
     }
 
-    if (this.state.status === 'resolved') {
+    if (status === 'resolved') {
       return (
         <Container>
           <Searchbar onSubmit={this.onSubmit} />
-          {!!this.state.images.length && (
-            <ImageGallery items={this.state.images} />
-          )}
-          {this.state.images.length !== this.state.totalHits && (
+          {!!images.length && <ImageGallery items={images} />}
+          {images.length !== totalImages && (
             <Button onBtnClick={this.onLoadMore} />
           )}
         </Container>
       );
     }
 
-    if (this.state.status === 'rejected') {
+    if (status === 'rejected') {
       return (
         <Container>
           <Searchbar onSubmit={this.onSubmit} />
-          {!!this.state.images.length && (
-            <ImageGallery items={this.state.images} />
-          )}
-          <ErrorText>{this.state.error}</ErrorText>
+          {!!images.length && <ImageGallery items={images} />}
+          <ErrorText>{error}</ErrorText>
         </Container>
       );
     }

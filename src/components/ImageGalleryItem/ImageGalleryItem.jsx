@@ -7,10 +7,8 @@ const { Item, Image } = css;
 
 class ImageGalleryItem extends Component {
   static propTypes = {
-    item: PropTypes.shape({
-      webformatURL: PropTypes.string.isRequired,
-      tags: PropTypes.string.isRequired,
-    }).isRequired,
+    webformatURL: PropTypes.string.isRequired,
+    tags: PropTypes.string.isRequired,
   };
 
   state = { showModal: false };
@@ -28,17 +26,20 @@ class ImageGalleryItem extends Component {
   };
 
   render() {
+    const { webformatURL, tags, largeImageURL } = this.props;
+    const { showModal } = this.state;
+
     return (
       <Item>
         <Image
-          src={this.props.item.webformatURL}
-          alt={this.props.item.tags}
+          src={webformatURL}
+          alt={tags}
           onClick={() => this.toggleModal()}
         />
-        {this.state.showModal && (
+        {showModal && (
           <Modal
-            link={this.props.item.largeImageURL}
-            desc={this.props.item.tags}
+            link={largeImageURL}
+            desc={tags}
             toggleModalWin={this.toggleModal}
           />
         )}

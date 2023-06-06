@@ -7,8 +7,8 @@ const { List } = css;
 const ImageGallery = ({ items }) => {
   return (
     <List>
-      {items.map((item) => (
-        <ImageGalleryItem key={item.id} item={item} />
+      {items.map(({ id, ...props }) => (
+        <ImageGalleryItem key={id} {...props} />
       ))}
     </List>
   );
