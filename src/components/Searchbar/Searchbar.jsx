@@ -1,10 +1,13 @@
-import SearchForm from 'components/SearchForm/SearchForm';
+import SearchForm from 'components/SearchForm';
+import css from 'components/Searchbar/Searchbar.styled';
+
+const { Container } = css;
 
 const Searchbar = (props) => {
   return (
-    <header>
+    <Container>
       <SearchForm {...props} />
-    </header>
+    </Container>
   );
 };
 
