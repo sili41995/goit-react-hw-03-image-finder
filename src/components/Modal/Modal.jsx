@@ -14,6 +14,20 @@ class Modal extends Component {
     desc: PropTypes.string.isRequired,
   };
 
+  componentDidMount() {
+    window.addEventListener('keydown', this.onEscPress);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.onEscPress);
+  }
+
+  onEscPress = (e) => {
+    if (e.code === 'Escape') {
+      this.props.toggleModalWin();
+    }
+  };
+
   closeModalWin = (e) => {
     const { toggleModalWin } = this.props;
 

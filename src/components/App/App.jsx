@@ -29,7 +29,7 @@ class App extends Component {
       if (!newImages.length) {
         throw new Error(`${imagesApiService.searchQuery} not found`);
       }
-      const totalImages = response.totalImages;
+      const totalImages = response.totalHits;
       this.setState({
         images: [...newImages],
         totalImages,

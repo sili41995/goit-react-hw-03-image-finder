@@ -15,14 +15,6 @@ class ImageGalleryItem extends Component {
 
   toggleModal = () => {
     this.setState(({ showModal: prevStatus }) => ({ showModal: !prevStatus }));
-    document.addEventListener('keydown', this.onPressEscape);
-  };
-
-  onPressEscape = (e) => {
-    if (e.code === 'Escape') {
-      this.setState({ showModal: false });
-      document.removeEventListener('keydown', this.onPressEscape);
-    }
   };
 
   render() {
