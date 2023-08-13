@@ -5,17 +5,24 @@ import { createPortal } from 'react-dom';
 
 class Modal extends Component {
   componentDidMount() {
-    window.addEventListener('keydown', this.props.hideModal);
+    window.addEventListener('keydown', this.hideModalWin);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.props.hideModal);
+    window.removeEventListener('keydown', this.hideModalWin);
   }
 
+  hideModalWin = (e) => {
+    if (e.code === 'Escape' || e.target === e.currentTarget) {
+      this.props.setModalWinState();
+    }
+  };
+
   render() {
-    const { largeImage, tags, hideModal } = this.props;
+    const { largeImage, tags } = this.props;
+
     return createPortal(
-      <Backdrop onClick={hideModal}>
+      <Backdrop onClick={this.hideModalWin}>
         <div>
           <img src={largeImage} alt={tags} />
         </div>
@@ -28,7 +35,7 @@ class Modal extends Component {
 Modal.propTypes = {
   largeImage: PropTypes.string.isRequired,
   tags: PropTypes.string.isRequired,
-  hideModal: PropTypes.func.isRequired,
+  setModalWinState: PropTypes.func.isRequired,
 };
 
 export default Modal;

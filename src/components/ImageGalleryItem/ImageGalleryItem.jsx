@@ -8,14 +8,8 @@ class ImageGalleryItem extends Component {
     showModal: false,
   };
 
-  onImgClick = () => {
-    this.setState({ showModal: true });
-  };
-
-  hideModal = (e) => {
-    if (e.code === 'Escape' || e.target === e.currentTarget) {
-      this.setState({ showModal: false });
-    }
+  setModalWinState = () => {
+    this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
 
   render() {
@@ -24,14 +18,14 @@ class ImageGalleryItem extends Component {
 
     return (
       <>
-        <Item onClick={this.onImgClick}>
+        <Item onClick={this.setModalWinState}>
           <Image src={webformatURL} alt={tags} />
         </Item>
         {showModal && (
           <Modal
             largeImage={largeImageURL}
             tags={tags}
-            hideModal={this.hideModal}
+            setModalWinState={this.setModalWinState}
           />
         )}
       </>
