@@ -28,11 +28,15 @@ class App extends Component {
   getImages = async (searchQuery, page) => {
     try {
       this.setState({ status: statuses.pending });
-      const { hits: newImages } = await fetchImages(searchQuery, page);
+      const { hits: newImages, totalHits } = await fetchImages(
+        searchQuery,
+        page
+      );
       this.setState(({ images }) => ({
         images: [...images, ...newImages],
+        status: statuses.resolved,
+        totalImages: totalHits,
       }));
-      this.setState({ status: statuses.resolved });
       successToast('Images uploaded');
     } catch (error) {
       this.setState({ error: error.message, status: statuses.rejected });
@@ -41,9 +45,13 @@ class App extends Component {
   };
 
   onSubmitForm = ({ query }) => {
+    if (!query.trim()) {
+      errorToast('Please, enter search query!');
+      return;
+    }
+
     this.setState({
       ...initialState,
-      status: statuses.pending,
       searchQuery: query,
     });
   };
@@ -53,7 +61,8 @@ class App extends Component {
   };
 
   render() {
-    const { images, status } = this.state;
+    const { images, status, totalImages } = this.state;
+    const lastPage = totalImages === images.length;
 
     return (
       <>
@@ -62,7 +71,8 @@ class App extends Component {
           {!!images.length && <ImageGallery images={images} />}
           {status === statuses.pending && <Loader />}
           {!!images.length &&
-            (status === statuses.resolved || status === statuses.rejected) && (
+            (status === statuses.resolved || status === statuses.rejected) &&
+            !lastPage && (
               <Button onLoadMoreBtnClick={this.onLoadMoreBtnClick} />
             )}
         </Container>

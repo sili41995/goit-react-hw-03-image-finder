@@ -13,7 +13,7 @@ class ImageGalleryItem extends Component {
   };
 
   hideModal = (e) => {
-    if (e.code === 'Escape' || e.type === 'click') {
+    if (e.code === 'Escape' || e.target === e.currentTarget) {
       this.setState({ showModal: false });
     }
   };
