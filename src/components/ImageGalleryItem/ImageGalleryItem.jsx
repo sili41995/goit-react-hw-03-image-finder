@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Modal from 'components/Modal';
+import { Image, Item } from './ImageGalleryItem.styled';
 
 class ImageGalleryItem extends Component {
   state = {
@@ -17,14 +19,14 @@ class ImageGalleryItem extends Component {
   };
 
   render() {
-    const { id, webformatURL, largeImageURL, tags } = this.props.image;
+    const { webformatURL, largeImageURL, tags } = this.props.image;
     const { showModal } = this.state;
 
     return (
       <>
-        <li key={id} onClick={this.onImgClick}>
-          <img src={webformatURL} alt={tags} />
-        </li>
+        <Item onClick={this.onImgClick}>
+          <Image src={webformatURL} alt={tags} />
+        </Item>
         {showModal && (
           <Modal
             largeImage={largeImageURL}
@@ -36,5 +38,14 @@ class ImageGalleryItem extends Component {
     );
   }
 }
+
+ImageGalleryItem.propTypes = {
+  image: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    webformatURL: PropTypes.string.isRequired,
+    largeImageURL: PropTypes.string.isRequired,
+    tags: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 export default ImageGalleryItem;

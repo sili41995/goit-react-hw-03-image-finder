@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import fetchImages from 'service/fetchImages';
+import statuses from 'constants/statuses';
+import initialState from 'constants/initialState';
 import Searchbar from 'components/Searchbar';
 import ImageGallery from 'components/ImageGallery';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
-import statuses from 'constants/statuses';
-import initialState from 'constants/initialState';
+import Container from 'components/Container';
+import Notification from 'components/Notification';
+import { errorToast, successToast } from 'utils/toasts';
 
 class App extends Component {
   state = {
@@ -30,8 +33,10 @@ class App extends Component {
         images: [...images, ...newImages],
       }));
       this.setState({ status: statuses.resolved });
+      successToast('Images uploaded');
     } catch (error) {
       this.setState({ error: error.message, status: statuses.rejected });
+      errorToast(error.message);
     }
   };
 
@@ -53,11 +58,15 @@ class App extends Component {
     return (
       <>
         <Searchbar onSubmit={this.onSubmitForm} />
-        <ImageGallery images={images} />
-        {status === statuses.pending && <Loader />}
-        {(status === statuses.resolved || status === statuses.rejected) && (
-          <Button onLoadMoreBtnClick={this.onLoadMoreBtnClick} />
-        )}
+        <Container>
+          {!!images.length && <ImageGallery images={images} />}
+          {status === statuses.pending && <Loader />}
+          {!!images.length &&
+            (status === statuses.resolved || status === statuses.rejected) && (
+              <Button onLoadMoreBtnClick={this.onLoadMoreBtnClick} />
+            )}
+        </Container>
+        <Notification />
       </>
     );
   }
